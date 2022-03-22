@@ -10,7 +10,6 @@ This example requires Python tiker to be installed. On Ubuntu, this can be insta
 
 ```
 sudo apt install python3-tk
-pip install tk
 ```
 
 ## Build
