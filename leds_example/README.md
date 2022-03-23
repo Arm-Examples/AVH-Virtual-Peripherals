@@ -6,7 +6,7 @@ This example comes with software and Python interface to simulate the behavior o
 
 ## Requirements
 
-This example requires Python tiker to be installed. On Ubuntu, this can be installed with:
+This example requires Python tkInter to be installed. On Ubuntu, this can be installed with:
 
 ```
 sudo apt install python3-tk
@@ -40,3 +40,9 @@ For other targets, specify PLATFORM\_NAME. E.g.:
 PLATFORM_NAME=VHT_MPS2_Cortex-M0 make
 ```
 
+## Output
+
+When starting the application, a sequence of instructions will turn on all the LEDs and display status messages.
+When this is completed, the user can click on the corresponding button to turn the LEDs on or off.
+
+![Screenshot](img/screenshot.png)
