@@ -20,11 +20,31 @@ static void cache_enable(void)
 #endif
 
 
-void delay10MCycles(){
+void delay5MCycles()
+{
     reset_timer();
     start_timer();
-    while(getCycles() < 10000000);
+    while(getCycles() < 5000000);
     stop_timer();
+}
+
+
+void boot_sequence()
+{
+    // Turn all LEDs off
+    ARM_VIO->SignalOut.signal = 0x00000000UL;
+    delay5MCycles();
+    printf("SW: VIO: Turn red LED on\n");
+    ARM_VIO->SignalOut.signal = 1 << 0;
+    delay5MCycles();
+    printf("SW: VIO: Turn green LED on\n");
+    ARM_VIO->SignalOut.signal = 1 << 1;
+    delay5MCycles();
+    printf("SW: VIO: Turn blue LED on\n");
+    ARM_VIO->SignalOut.signal = 1 << 2;
+    delay5MCycles();
+    printf("SW: VIO: Turn all LEDs off\n");
+    ARM_VIO->SignalOut.signal = 0x00000000UL;
 }
 
 
@@ -43,28 +63,15 @@ int main(void)
   printf("UART started.\n");
 #endif
 
+  ARM_VIO->SignalOut.mask = 0x00000007UL;
+  ARM_VIO->SignalIn.mask = 0x00000007UL;
+
+  printf("SW: VIO: Boot sequence...\n");
+  boot_sequence();
+
+  printf("SW: VIO: Main loop...\n");
   while(1)
   {
-    ARM_VIO->Value[0] = 1;
-    printf("SW: VIO: Red LED turned on\n");
-
-    delay10MCycles();
-
-    ARM_VIO->Value[0] = 0;
-    printf("SW: VIO: Red LED turned off\n");
-    ARM_VIO->Value[1] = 1;
-    printf("SW: VIO: Green LED turned on\n");
-
-    delay10MCycles();
-
-    ARM_VIO->Value[1] = 0;
-    printf("SW: VIO: Green LED turned off\n");
-    ARM_VIO->Value[2] = 1;
-    printf("SW: VIO: Blue LED turned on\n");
-
-    delay10MCycles();
-
-    ARM_VIO->Value[2] = 0;
-    printf("SW: VIO: Blue LED turned off\n");
+    ARM_VIO->SignalOut.signal = ARM_VIO->SignalIn.signal & ARM_VIO->SignalOut.mask;
   }
 }
