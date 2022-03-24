@@ -40,9 +40,18 @@ class Example(Frame):
         self.master.title("Example LEDs")
         self.pack(fill=BOTH, expand=1)
         self.canvas = Canvas(self, bg='black')
-        self.bRed = ttk.Button(self, text= "Red", command=self.clickRed)
+        self.bRed   = ttk.Button(self, text= "Red"  , command=self.clickRed)
+        self.bRed.place(x=3, y=90)
         self.bGreen = ttk.Button(self, text= "Green", command=self.clickGreen)
-        self.bBlue = ttk.Button(self, text= "Blue", command=self.clickBlue)
+        self.bGreen.place(x=100, y=90)
+        self.bBlue  = ttk.Button(self, text= "Blue" , command=self.clickBlue)
+        self.bBlue.place(x=200, y=90)
+        self.lRed   = self.canvas.create_oval(10, 10, 80, 80, outline='white',
+                                              fill='black', width=3)
+        self.lGreen = self.canvas.create_oval(110, 10, 180, 80, outline='white',
+                                              fill='black', width=3)
+        self.lBlue  = self.canvas.create_oval(210, 10, 280, 80, outline='white',
+                                              fill='black', width=3)
         self.canvas.pack(fill=BOTH, expand=1)
 
 
@@ -50,27 +59,17 @@ class Example(Frame):
         global SignalIn, SignalOut, redMask, greenMask, blueMask
 
         if(SignalOut & redMask == 1):
-            self.canvas.create_oval(10, 10, 80, 80, outline='white',
-                    fill='red', width=3)
+            self.canvas.itemconfig(self.lRed, fill='red')
         else:
-            self.canvas.create_oval(10, 10, 80, 80, outline='white',
-                    fill='black', width=3)
+            self.canvas.itemconfig(self.lRed, fill='black')
         if(SignalOut & greenMask == 2):
-            self.canvas.create_oval(110, 10, 180, 80, outline='white',
-                    fill='green', width=3)
+            self.canvas.itemconfig(self.lGreen, fill='green')
         else:
-            self.canvas.create_oval(110, 10, 180, 80, outline='white',
-                    fill='black', width=3)
+            self.canvas.itemconfig(self.lGreen, fill='black')
         if(SignalOut & blueMask == 4):
-            self.canvas.create_oval(210, 10, 280, 80, outline='white',
-                    fill='blue', width=3)
+            self.canvas.itemconfig(self.lBlue, fill='blue')
         else:
-            self.canvas.create_oval(210, 10, 280, 80, outline='white',
-                    fill='black', width=3)
-
-        self.bRed.place(x=3, y=90)
-        self.bGreen.place(x=100, y=90)
-        self.bBlue.place(x=200, y=90)
+            self.canvas.itemconfig(self.lBlue, fill='black')
 
         self.canvas.pack()
 
@@ -79,8 +78,10 @@ class Example(Frame):
         logging.info("Python function clickRed() called")
         if(SignalIn & redMask):
             SignalIn &= ~redMask
+            self.bRed.state(['!pressed'])
         else:
             SignalIn |= redMask
+            self.bRed.state(['pressed'])
         self.draw()
 
     def clickGreen(self):
@@ -88,8 +89,10 @@ class Example(Frame):
         logging.info("Python function clickGreen() called")
         if(SignalIn & greenMask):
             SignalIn &= ~greenMask
+            self.bGreen.state(['!pressed'])
         else:
             SignalIn |= greenMask
+            self.bGreen.state(['pressed'])
         self.draw()
 
     def clickBlue(self):
@@ -97,8 +100,10 @@ class Example(Frame):
         logging.info("Python function clickBlue() called")
         if(SignalIn & blueMask):
             SignalIn &= ~blueMask
+            self.bBlue.state(['!pressed'])
         else:
             SignalIn |= blueMask
+            self.bBlue.state(['pressed'])
         self.draw()
 
 
