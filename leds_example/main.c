@@ -8,18 +8,6 @@
 #include "main.h"
 
 
-
-#ifdef CACHE_ENABLE
-static void cache_enable(void)
-{
-  // Invalidate caches
-  SCB->ICIALLU = 0UL;
-  // Enable both I & D caches
-  SCB->CCR = SCB_CCR_IC_Msk | SCB_CCR_DC_Msk;
-}
-#endif
-
-
 void delay5MCycles()
 {
     reset_timer();
@@ -53,10 +41,6 @@ int main(void)
   uint32_t val, pattern;
   int32_t ival ,ipattern;
   uint32_t i;
-
-#ifdef CACHE_ENABLE
-  cache_enable();
-#endif
 
 #ifdef UART
   UartStdOutInit();
