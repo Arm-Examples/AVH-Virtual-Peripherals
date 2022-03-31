@@ -30,4 +30,4 @@ if [[ "${PLATFORM_NAME}" = *"MPS3"* ]]; then
 fi
 
 
-${VHT_EXE} -V ./python -f ./config/MPS3.config -a ./example-leds.axf $*
+${VHT_EXE} -V ./python -f ./config/${BOARD_NAME}.config -a ./example-leds.axf $*
